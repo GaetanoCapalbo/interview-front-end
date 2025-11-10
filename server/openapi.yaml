@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  title: EventiCampania API
+  version: 1.0.0
+  description: API per la piattaforma EventiCampania
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /events:
+    get:
+      summary: Ottieni lista eventi con filtri e paginazione
+      parameters:
+        - in: query
+          name: _page
+          schema:
+            type: integer
+          description: Numero pagina
+        - in: query
+          name: _limit
+          schema:
+            type: integer
+          description: Eventi per pagina
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Ricerca full-text
+        - in: query
+          name: categoryId
+          schema:
+            type: string
+          description: Filtra per categoria
+        - in: query
+          name: location_like
+          schema:
+            type: string
+          description: Filtra per località (ricerca parziale)
+        - in: query
+          name: date_gte
+          schema:
+            type: string
+            format: date-time
+          description: Eventi da questa data in poi
+        - in: query
+          name: date_lte
+          schema:
+            type: string
+            format: date-time
+          description: Eventi fino a questa data
+        - in: query
+          name: _expand
+          schema:
+            type: string
+            enum: [category]
+          description: Include oggetto categoria nella risposta
+      responses:
+        '200':
+          description: Lista eventi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+    post:
+      summary: Crea nuovo evento
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                location:
+                  type: string
+                date:
+                  type: string
+                  format: date-time
+                categoryId:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Evento creato
+
+  /events/{id}:
+    get:
+      summary: Dettagli evento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID evento
+        - in: query
+          name: _expand
+          schema:
+            type: string
+            enum: [category]
+          description: Include oggetto categoria
+      responses:
+        '200':
+          description: Dettagli evento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+  /events/{id}/attendees:
+    post:
+      summary: Segna partecipazione all'evento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Partecipazione registrata
+
+  /events/{id}/favorites:
+    post:
+      summary: Aggiungi evento ai preferiti
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Aggiunto ai preferiti
+
+  /events/{id}/ratings:
+    post:
+      summary: Aggiungi valutazione all'evento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                date:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Valutazione aggiunta
+    get:
+      summary: Ottieni valutazioni evento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista valutazioni
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rating'
+
+  /categories:
+    get:
+      summary: Lista categorie eventi
+      responses:
+        '200':
+          description: Categorie disponibili
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+
+  /uploads/{imageName}:
+    get:
+      summary: Ottieni immagine caricata
+      parameters:
+        - in: path
+          name: imageName
+          required: true
+          schema:
+            type: string
+          description: Nome immagine
+      responses:
+        '200':
+          description: Immagine
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        date:
+          type: string
+          format: date-time
+        categoryId:
+          type: string
+        attendees:
+          type: integer
+        favorites:
+          type: integer
+        averageRating:
+          type: number
+        image:
+          type: string
+
+    Rating:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        date:
+          type: string
+          format: date-time
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string

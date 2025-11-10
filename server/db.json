@@ -1,0 +1,51 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "name": "Pizzafest Napoli 2024",
+      "description": "Il più grande evento dedicato alla pizza napoletana. Maestri pizzaioli da tutto il mondo si sfideranno per creare la pizza perfetta.",
+      "location": "Napoli, via Roma 123",
+      "date": "2024-09-15T18:00:00.000Z",
+      "categoryId": "1",
+      "attendees": 0,
+      "favorites": 0,
+      "averageRating": 0,
+      "image": "/uploads/pizza_festival.png"
+    },
+    {
+      "id": "2",
+      "name": "Ravello Festival - Concerto al tramonto",
+      "description": "Serata di musica classica nei giardini di Villa Rufolo con vista mozzafiato sulla Costiera Amalfitana.",
+      "location": "Ravello, corso Italia 123",
+      "date": "2024-07-20T20:30:00.000Z",
+      "categoryId": "2",
+      "attendees": 0,
+      "favorites": 0,
+      "averageRating": 0,
+      "image": "/uploads/ravello.png"
+    }
+  ],
+  "ratings": [],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Enogastronomia"
+    },
+    {
+      "id": "2",
+      "name": "Musica"
+    },
+    {
+      "id": "3",
+      "name": "Arte e Cultura"
+    },
+    {
+      "id": "4",
+      "name": "Sport"
+    },
+    {
+      "id": "5",
+      "name": "Festival e Fiere"
+    }
+  ]
+}
