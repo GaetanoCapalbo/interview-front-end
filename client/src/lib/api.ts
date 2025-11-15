@@ -70,3 +70,53 @@ export function getImageUrl(imagePath: string | null): string {
   return `${API_BASE_URL}${imagePath}`;
 }
 
+
+export async function markAttendance(eventId: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/events/${eventId}/attendees`, {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to mark attendance");
+  }
+}
+
+export async function removeAttendance(): Promise<void> {
+
+  return Promise.resolve();
+}
+
+export async function addToFavorites(eventId: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/events/${eventId}/favorites`, {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add to favorites");
+  }
+}
+
+export async function removeFromFavorites(): Promise<void> {
+  return Promise.resolve();
+}
+
+export async function submitRating(
+  eventId: string,
+  rating: number
+): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/events/${eventId}/ratings`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      rating,
+      date: new Date().toISOString(),
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to submit rating");
+  }
+}
+

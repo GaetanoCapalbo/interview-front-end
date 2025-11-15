@@ -10,7 +10,7 @@ import EventGrid from "@/components/events/EventGrid";
 
 const EVENTS_PER_PAGE = 3;
 
-export function EventListPage() {
+export default function EventListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data: events = [], isLoading, isError, error, refetch, isFetching } = useEvents({
     page: currentPage,

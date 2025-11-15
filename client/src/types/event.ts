@@ -32,3 +32,20 @@ export interface EventRequest {
     limit: number;
     q: string;
 }
+
+export interface EventsResponse {
+    events: EventWithCategory[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }
+  
+  export interface Rating {
+    id: string;
+    eventId: string;
+    rating: number; 
+    date: string; 
+  }
+  
+  
