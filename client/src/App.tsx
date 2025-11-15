@@ -2,7 +2,8 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Navbar } from "./components/Navbar";
 import  HomePage  from "./pages/HomePage";
-import { EventListPage } from "./pages/EventListPage";
+import EventListPage  from "./pages/EventListPage";
+import EventDetailsPage  from "./pages/EventDetailPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/events" element={<EventListPage />} />
+          <Route path="/events/:id" element={<EventDetailsPage />} />
         </Routes>
       </div>
     </BrowserRouter>

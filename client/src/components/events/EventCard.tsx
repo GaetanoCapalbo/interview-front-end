@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getImageUrl } from "@/lib/api";
 import type { EventWithCategory } from "@/types/event";
 import { MapPin, Calendar, Users, Star, Heart } from "lucide-react";
+import { Link } from "react-router";
 
 interface EventCardProps {
   event: EventWithCategory;
@@ -11,6 +12,7 @@ interface EventCardProps {
 
 export default function EventCard({ event }: EventCardProps) {
   return (
+    <Link to={`/events/${event.id}`} className="block h-full">
     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
       {event.image && (
         <div className="w-full h-40 sm:h-48 overflow-hidden">
@@ -65,6 +67,7 @@ export default function EventCard({ event }: EventCardProps) {
         </div>
       </CardContent>
     </Card>
+    </Link>
   );
 }
 
