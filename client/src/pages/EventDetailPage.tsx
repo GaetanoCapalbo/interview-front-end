@@ -1,14 +1,14 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { useEvent } from "@/hooks/useEvent";
-import { useToggleAttendance, useToggleFavorites, useSubmitRating } from "@/hooks/useEventMutations";
+import { useToggleAttendance, useToggleFavorites, useSubmitRating, useDeleteEvent } from "@/hooks/useEventMutations";
 import { getImageUrl } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import StarRating from "@/components/events/StarRating";
-import LoadingState  from "@/components/events/LoadingState";
+import  StarRating  from "@/components/events/StarRating";
+import  LoadingState  from "@/components/events/LoadingState";
 import  ErrorState  from "@/components/events/ErrorState";
-import { MapPin, Calendar, Users, Heart, Star, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { MapPin, Calendar, Users, Heart, Star, ArrowLeft, CheckCircle2, Edit, Trash2, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -90,12 +90,14 @@ function setUserRatingState(eventId: string, rating: number | null) {
 
 export default function EventDetailsPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data: event, isLoading, isError, error, refetch } = useEvent(id || "");
   
   const [rating, setRating] = useState(0);
   const [hasRated, setHasRated] = useState(false);
   const [isAttending, setIsAttending] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -112,6 +114,7 @@ export default function EventDetailsPage() {
   const attendanceMutation = useToggleAttendance();
   const favoritesMutation = useToggleFavorites();
   const submitRatingMutation = useSubmitRating();
+  const deleteEventMutation = useDeleteEvent();
 
   const handleToggleAttendance = async () => {
     if (!id) return;
@@ -131,7 +134,7 @@ export default function EventDetailsPage() {
         await refetch();
       }
     } catch (err) {
-      console.error("Failed to toggle attendance:", err);
+      console.error("Errore nel gestire la partecipazione all'evento:", err);
       setIsAttending(!newState);
       setUserAttendanceState(id, !newState);
     }
@@ -155,7 +158,7 @@ export default function EventDetailsPage() {
         await refetch();
       }
     } catch (err) {
-      console.error("Failed to toggle favorites:", err);
+      console.error("Errore nel gestire i preferiti dell'evento:", err);
       setIsFavorite(!newState);
       setUserFavoriteState(id, !newState);
     }
@@ -178,8 +181,21 @@ export default function EventDetailsPage() {
         setUserRatingState(id, rating);
         refetch();
       } catch (err) {
-        console.error("Failed to submit rating:", err);
+        console.error("Errore nel gestire la valutazione dell'evento:", err);
       }
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!id) return;
+
+    try {
+      await deleteEventMutation.mutateAsync(id);
+      navigate("/events");
+    } catch (err) {
+      console.error("Errore nell'eliminazione dell'evento:", err);
+      alert("Errore nell'eliminazione dell'evento. Riprova.");
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -198,13 +214,72 @@ export default function EventDetailsPage() {
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <Link
-        to="/events"
-        className="inline-flex items-center gap-2 text-sm sm:text-base text-muted-foreground hover:text-foreground mb-4 sm:mb-6 transition-colors"
-      >
-        <ArrowLeft className="size-4" />
-        <span>Torna alla lista eventi</span>
-      </Link>
+      <div className="flex items-center justify-between mb-4 sm:mb-6 gap-4">
+        <Link
+          to="/events"
+          className="inline-flex items-center gap-2 text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="size-4" />
+          <span>Torna alla lista eventi</span>
+        </Link>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            to={`/events/${id}/edit`}
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm sm:text-base"
+          >
+            <Edit className="size-4" />
+            <span className="hidden sm:inline">Modifica Evento</span>
+            <span className="sm:hidden">Modifica</span>
+          </Link>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => setShowDeleteConfirm(true)}
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 text-sm sm:text-base"
+            disabled={deleteEventMutation.isPending}
+          >
+            <Trash2 className="size-4" />
+            <span className="hidden sm:inline">Cancella Evento</span>
+            <span className="sm:hidden">Cancella</span>
+          </Button>
+        </div>
+      </div>
+    
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-background rounded-lg shadow-lg max-w-md w-full p-6 space-y-4">
+            <h2 className="text-xl font-bold">Conferma eliminazione</h2>
+            <p className="text-muted-foreground">
+              Sei sicuro di voler eliminare l'evento <strong>"{event?.name}"</strong>? Questa azione non può essere annullata.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={deleteEventMutation.isPending}
+              >
+                Annulla
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDeleteEvent}
+                disabled={deleteEventMutation.isPending}
+              >
+                {deleteEventMutation.isPending ? (
+                  <>
+                    <Loader2 className="size-4 mr-2 animate-spin" />
+                    Eliminazione...
+                  </>
+                ) : (
+                  "Elimina"
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-4xl mx-auto">
         {event.image && (
