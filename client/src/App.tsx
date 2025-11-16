@@ -4,6 +4,8 @@ import { Navbar } from "./components/Navbar";
 import  HomePage  from "./pages/HomePage";
 import EventListPage  from "./pages/EventListPage";
 import EventDetailsPage  from "./pages/EventDetailPage";
+import CreateEventPage from "./pages/CreateEventPage";
+import EditEventPage from "./pages/EditEventPage";
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/events" element={<EventListPage />} />
+          <Route path="/events/new" element={<CreateEventPage />} />
           <Route path="/events/:id" element={<EventDetailsPage />} />
+          <Route path="/events/:id/edit" element={<EditEventPage />} />
         </Routes>
       </div>
     </BrowserRouter>

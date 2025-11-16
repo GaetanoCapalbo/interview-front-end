@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { Calendar } from "lucide-react";
+import { Calendar, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -30,6 +30,19 @@ export function Navbar() {
               )}
             >
               Eventi
+            </Link>
+            <Link
+              to="/events/new"
+              className={cn(
+                "text-sm sm:text-base font-medium transition-colors hover:text-primary px-2 py-1 rounded-md",
+                isActive("/events/new")
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground"
+              )}
+            >
+              <Plus className="size-4 sm:size-5 inline mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Nuovo Evento</span>
+              <span className="sm:hidden">Nuovo</span>
             </Link>
           </div>
         </div>

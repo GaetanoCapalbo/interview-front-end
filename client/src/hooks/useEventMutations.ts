@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { markAttendance, removeAttendance, addToFavorites, removeFromFavorites, submitRating } from "@/lib/api";
+import { markAttendance, removeAttendance, addToFavorites, removeFromFavorites, submitRating, createEvent, uploadImage, updateEvent, deleteEvent, type CreateEventData, type UpdateEventData } from "@/lib/api";
 
 export function useToggleAttendance() {
   const queryClient = useQueryClient();
@@ -66,3 +66,44 @@ export function useSubmitRating() {
   });
 }
 
+export function useCreateEvent() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateEventData) => createEvent(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+}
+
+export function useUploadImage() {
+  return useMutation({
+    mutationFn: (file: File) => uploadImage(file),
+  });
+}
+
+export function useUpdateEvent() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateEventData }) =>
+      updateEvent(id, data),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ["event", id] });
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+}
+
+export function useDeleteEvent() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteEvent(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.removeQueries({ queryKey: ["event"] });
+    },
+  });
+}
