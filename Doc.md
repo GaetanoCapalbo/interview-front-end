@@ -64,7 +64,7 @@ client/
       EditEventPage.tsx
     App.tsx
 
-
+```
 
 ## Routing
 Le route sono definite in App.tsx:
