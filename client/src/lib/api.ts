@@ -144,16 +144,16 @@ export async function uploadImage(file: File): Promise<string> {
   }
 
   const data = await response.json();
-  return data.url; // Returns /uploads/filename
+  return data.url; 
 }
 
 export interface CreateEventData {
   name: string;
   description: string;
   location: string;
-  date: string; // ISO string
+  date: string; 
   categoryId: string;
-  image: string; // Required
+  image: string; 
 }
 
 export async function createEvent(data: CreateEventData): Promise<EventWithCategory> {
@@ -177,9 +177,9 @@ export interface UpdateEventData {
   name: string;
   description: string;
   location: string;
-  date: string; // ISO string
+  date: string; 
   categoryId: string;
-  image: string; // Required
+  image: string; 
 }
 
 export async function updateEvent(id: string, data: UpdateEventData): Promise<EventWithCategory> {
