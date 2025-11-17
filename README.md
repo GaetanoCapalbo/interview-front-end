@@ -113,4 +113,9 @@ Gestisci gli aggiornamenti in modo reattivo senza dover ricaricare la pagina. Bo
 
 ## Come Eseguire
 
+Da  `client/`:
+```
+npm install
+npm run dev      # avvia server di sviluppo Vite
+```
 ...
