@@ -5,11 +5,12 @@ import { useEvent } from "@/hooks/useEvent";
 import { useToggleAttendance, useToggleFavorites, useSubmitRating, useDeleteEvent } from "@/hooks/useEventMutations";
 import { getImageUrl } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import  StarRating  from "@/components/events/StarRating";
-import  LoadingState  from "@/components/events/LoadingState";
-import  ErrorState  from "@/components/events/ErrorState";
+import StarRating from "@/components/events/StarRating";
+import LoadingState from "@/components/events/LoadingState";
+import ErrorState from "@/components/events/ErrorState";
 import { MapPin, Calendar, Users, Heart, Star, ArrowLeft, CheckCircle2, Edit, Trash2, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
+// import FacebookShare from "@/components/events/FacebookShare";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY_ATTENDANCE = "eventiCampania_attendance";
@@ -134,7 +135,7 @@ export default function EventDetailsPage() {
         await refetch();
       }
     } catch (err) {
-      console.error("Errore nel gestire la partecipazione all'evento:", err);
+      console.error("Failed to toggle attendance:", err);
       setIsAttending(!newState);
       setUserAttendanceState(id, !newState);
     }
@@ -158,7 +159,7 @@ export default function EventDetailsPage() {
         await refetch();
       }
     } catch (err) {
-      console.error("Errore nel gestire i preferiti dell'evento:", err);
+      console.error("Failed to toggle favorites:", err);
       setIsFavorite(!newState);
       setUserFavoriteState(id, !newState);
     }
@@ -181,7 +182,7 @@ export default function EventDetailsPage() {
         setUserRatingState(id, rating);
         refetch();
       } catch (err) {
-        console.error("Errore nel gestire la valutazione dell'evento:", err);
+        console.error("Failed to submit rating:", err);
       }
     }
   };
@@ -193,7 +194,7 @@ export default function EventDetailsPage() {
       await deleteEventMutation.mutateAsync(id);
       navigate("/events");
     } catch (err) {
-      console.error("Errore nell'eliminazione dell'evento:", err);
+      console.error("Failed to delete event:", err);
       alert("Errore nell'eliminazione dell'evento. Riprova.");
       setShowDeleteConfirm(false);
     }
@@ -244,7 +245,7 @@ export default function EventDetailsPage() {
           </Button>
         </div>
       </div>
-    
+
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-background rounded-lg shadow-lg max-w-md w-full p-6 space-y-4">
@@ -334,7 +335,7 @@ export default function EventDetailsPage() {
             <div>
               <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">Luogo</h2>
               <div className="flex items-start gap-3">
-                <MapPin className="size-5 sm:size-6 text-primary mt-1 flex-shrink-0" />
+                <MapPin className="size-5 sm:size-6 text-primary mt-1 shrink-0" />
                 <p className="text-sm sm:text-base text-muted-foreground">
                   {event.location}
                 </p>
@@ -344,7 +345,7 @@ export default function EventDetailsPage() {
             <div>
               <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">Data e Ora</h2>
               <div className="flex items-start gap-3">
-                <Calendar className="size-5 sm:size-6 text-primary mt-1 flex-shrink-0" />
+                <Calendar className="size-5 sm:size-6 text-primary mt-1 shrink-0" />
                 <p className="text-sm sm:text-base text-muted-foreground">
                   {format(new Date(event.date), "PPP 'alle' p", { locale: it })}
                 </p>
@@ -404,6 +405,14 @@ export default function EventDetailsPage() {
                 />
                 {isFavorite ? "Nei preferiti" : "Aggiungi ai preferiti"}
               </Button>
+
+              {/* <FacebookShare
+                name={event.name}
+                dateISO={event.date}
+                location={event.location}
+                hashtag="#EventiCampania"
+                className="w-full"
+              /> */}
 
               <div className="border rounded-lg p-4 sm:p-6 space-y-4">
                 <h3 className="text-base sm:text-lg font-semibold">

@@ -19,10 +19,46 @@
       "location": "Ravello, corso Italia 123",
       "date": "2024-07-20T20:30:00.000Z",
       "categoryId": "2",
+      "attendees": 1,
+      "favorites": 1,
+      "averageRating": 0,
+      "image": "/uploads/ravello.png"
+    },
+    {
+      "id": "1763360238838",
+      "name": "Evento Test Numero 1",
+      "description": "Evento Test Numero 1 ",
+      "location": "Caserta",
+      "date": "2025-11-19T12:43:00.000Z",
+      "categoryId": "3",
       "attendees": 0,
       "favorites": 0,
       "averageRating": 0,
-      "image": "/uploads/ravello.png"
+      "image": "https://media.istockphoto.com/id/974238866/it/foto/il-pubblico-ascolta-il-docente-alla-conferenza.jpg?s=612x612&w=0&k=20&c=bWTpVn6Jmql_U-amLXVy6VDqEGDAAL0u5hSymS77-yM="
+    },
+    {
+      "id": "1763360310399",
+      "name": "Evento Test Numero 2",
+      "description": "Evento Test Numero 2\nTest ricerca \nLocalità Caserta Evento Passato",
+      "location": "Caserta",
+      "date": "2025-10-01T10:23:00.000Z",
+      "categoryId": "1",
+      "attendees": 0,
+      "favorites": 0,
+      "averageRating": 0,
+      "image": "https://media.istockphoto.com/id/974238866/it/foto/il-pubblico-ascolta-il-docente-alla-conferenza.jpg?s=612x612&w=0&k=20&c=bWTpVn6Jmql_U-amLXVy6VDqEGDAAL0u5hSymS77-yM="
+    },
+    {
+      "id": "1763360426017",
+      "name": "Evento Test Numero 3",
+      "description": "Evento Test Numero 3\nLocalità Caserta\nCategoria Sport\nEvento Futuro",
+      "location": "Caserta",
+      "date": "2025-12-11T11:25:00.000Z",
+      "categoryId": "4",
+      "attendees": 0,
+      "favorites": 0,
+      "averageRating": 0,
+      "image": "https://media.istockphoto.com/id/974238866/it/foto/il-pubblico-ascolta-il-docente-alla-conferenza.jpg?s=612x612&w=0&k=20&c=bWTpVn6Jmql_U-amLXVy6VDqEGDAAL0u5hSymS77-yM="
     }
   ],
   "ratings": [],
